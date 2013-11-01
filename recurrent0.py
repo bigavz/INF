@@ -4,9 +4,9 @@ import pylab as py
 
 ## setup parameters and state variables
 N    = 10                      # number of neurons
-T    = 200                     # total time to simulate (msec)
+T    = 50                     # total time to simulate (msec)
 dt   = 0.125                   # simulation time step (msec)
-time = [0,4]  # time array [0..tau_ref]
+time = np.arange(0, T+dt, dt)  # time array
 
 
 ## LIF properties
@@ -36,18 +36,16 @@ def Isyn(t):
     return t*np.exp(-t/tau_psc)
 last_spike = np.zeros(N) - tau_ref
 
-
-
 ## Simulate network
 raster = np.zeros([N,len(time)])*np.nan
 for i, t in enumerate(time[1:],1):
-    active = np.nonzero(t > last_spike + tau_ref)
+    active = np.nonzero(t > last_spike + tau_ref) #lastspike is initialized as an N array of tauref's, active is N array of ints 0-9 (somehow??)
     Vm[active,i] = Vm[active,i-1] + (-Vm[active,i-1] + I[active,i-1]) / tau_m * dt
 
     spiked = np.nonzero(Vm[:,i] > Vth)
     last_spike[spiked] = t
     raster[spiked,i] = spiked[0]+1
-    I[:,i] = Iext + synapses.dot(Isyn(t - last_spike))
+    I[:,i] = Iext + synapses.dot(Isyn(t - last_spike)) #1.5 + synapses[0,N] dot Isyn(t-lastspike)
 
 ## plot membrane potential trace
 py.plot(time, np.transpose(raster), 'b.')
