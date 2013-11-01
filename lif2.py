@@ -9,7 +9,7 @@ __author__ = 'Avi'
 
 ## setup parameters and state variables
 dt   = 0.5                   # simulation time step (msec)
-T    = np.arange(0,15,dt)           # total time to simulate (msec)
+T    = np.arange(0,100,dt)           # total time to simulate (msec)
 raster = np.zeros(len(T))
 test=np.zeros(len(T))
 
