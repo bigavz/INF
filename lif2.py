@@ -9,7 +9,7 @@ __author__ = 'Avi'
 
 ## setup parameters and state variables
 dt   = 0.5                   # simulation time step (msec)
-T    = np.arange(0,100,dt)           # total time to simulate (msec)
+T    = np.arange(0,50,dt)           # total time to simulate (msec)
 raster = np.zeros(len(T))
 test=np.zeros(len(T))
 
@@ -30,8 +30,9 @@ last_spike=0 #or -tau_ref
 #check if in refractory period
 #if not, spike
 #np.nonzero(last_spike>0) returns proper indices. righteous, so you can call this in spike(V[])
+x = 0
 
-for y,x in enumerate(T): #x is the timestep
+while x < 50: #x is the timestep
     if last_spike>=0: #if time since last spike is positive
         temp = V + (I-V)/tau_m*dt
         V = temp
@@ -39,11 +40,13 @@ for y,x in enumerate(T): #x is the timestep
             last_spike = 0-tau_ref
             V = 0
     last_spike=last_spike+dt
-    #print(last_spike, V) keep track of refrac time and corresponding voltage!
-    I = Iext + x*np.exp((0-x)/tau_psc)
-    raster[y] = V
+    print(last_spike, V, I) #keep track of refrac time and corresponding voltage!
+        I = Iext + x*np.exp((0-x)/tau_psc) #exponential term decreases as x increases in magnitude
+    raster[x] = V
+    x+=1
 
 
-py.plot(T, np.transpose(raster), 'b.')
-py.show()
+
+#py.plot(T, np.transpose(raster), 'b.')
+#py.show()
 

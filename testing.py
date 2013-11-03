@@ -1,7 +1,14 @@
 import numpy as np
-dt = .5
+import pylab as py
+
+raster = [0]
+i=0
+while i<5:
+    raster.append(i*np.exp(0-i))
+    i+=1
 
 
-T    = np.arange(0,5,dt)           # total time to simulate (msec)
+py.plot(range(0,len(raster),1), np.transpose(raster), 'b.')
+py.show()
 
-print(T)
+print(raster)
